@@ -1,0 +1,72 @@
+import pytest
+from brownie import *
+
+@pytest.fixture(scope="module", autouse=True)
+def user(deployer):
+    return TestSwap.deploy(deployer)
+@pytest.fixture(scope="module", autouse=True)
+def deployer():
+    return {'from': accounts[1]}
+@pytest.fixture(scope="module", autouse=True)
+def blockartNft():
+    return Contract("0xb80fbf6cdb49c33dc6ae4ca11af8ac47b0b4c0f3")
+@pytest.fixture(scope="module", autouse=True)
+def decentralandNft():
+    return Contract("0xF87E31492Faf9A91B02Ee0dEAAd50d51d56D5d4d")
+@pytest.fixture(scope="module", autouse=True)
+def nodeRunnerNft():
+    return Contract("0x89eE76cC25Fcbf1714ed575FAa6A10202B71c26A")
+@pytest.fixture(scope="module", autouse=True)
+def hashmaskNft():
+    return Contract("0xC2C747E0F7004F9E8817Db2ca4997657a7746928")
+@pytest.fixture(scope="module", autouse=True)
+def dokiNft():
+    return Contract("0x7CdC0421469398e0F3aA8890693d86c840Ac8931")
+@pytest.fixture(scope="module", autouse=True)
+def chonkerNft():
+    return Contract("0xC805658931f959abc01133aa13fF173769133512")
+@pytest.fixture(scope="module", autouse=True)
+def memeNft():
+    return Contract("0xe4605d46Fd0B3f8329d936a8b258D69276cBa264")
+@pytest.fixture(scope="module", autouse=True)
+def dai():
+    return Contract("0x6B175474E89094C44Da98b954EedeAC495271d0F")
+@pytest.fixture(scope="module", autouse=True)
+def usdc():
+    return Contract("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48")
+@pytest.fixture(scope="module", autouse=True)
+def eth_bag(accounts):
+    return accounts.at("0x829BD824B016326A401d083B33D092293333A830", force=True)
+@pytest.fixture(scope="module", autouse=True)
+def EBA20():
+    return "0x57c31c042cb2f6a50f3da70ade4fee20c86b7493"
+@pytest.fixture(scope="module", autouse=True)
+def LAND20():
+    return "0x1E0CD9506d465937E9d6754e76Cd389A8bD90FBf"
+@pytest.fixture(scope="module", autouse=True)
+def NDR20():
+    return "0x303Af77Cf2774AABff12462C110A0CCf971D7DbE"
+@pytest.fixture(scope="module", autouse=True)
+def DOKI20():
+    return "0x22C4AD011Cce6a398B15503e0aB64286568933Ed"
+@pytest.fixture(scope="module", autouse=True)
+def MASK20():
+    return "0xc2BdE1A2fA26890c8E6AcB10C91CC6D9c11F4a73"
+@pytest.fixture(scope="module", autouse=True)
+def CHONK20():
+    return "0xaDBEBbd65a041E3AEb474FE9fe6939577eB2544F"
+@pytest.fixture(scope="module", autouse=True)
+def MEME20():
+    return "0x60ACD58d00b2BcC9a8924fdaa54A2F7C0793B3b2"
+@pytest.fixture(scope="module", autouse=True)
+def ZERO_ADDRESS():
+    return "0x0000000000000000000000000000000000000000"
+@pytest.fixture(scope="module", autouse=True)
+def ETH_ADDRESS():
+    return "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
+@pytest.fixture(scope="module", autouse=True)
+def hashmaskIds():
+    return [3790,3791,3792,3793,3794,3795,3796,3797,3798,3799,3800] 
+@pytest.fixture(scope="module", autouse=True)
+def swapper(deployer):
+    return NFT20Swapper.deploy(deployer)
