@@ -38,6 +38,13 @@ interface Uni {
         address to,
         uint256 deadline
     ) external payable returns (uint256[] memory amounts);
+
+    function swapExactETHForTokens(
+        uint amountOutMin, 
+        address[] calldata path, 
+        address to, 
+        uint deadline
+    ) external payable returns (uint[] memory amounts);
 }
 
 contract UniswapRouter {
@@ -47,12 +54,13 @@ contract UniswapRouter {
 
     address public DEX = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
     address public WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
+    address public ETH = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
 
     function _swapExactERC20ForERC20ViaUniswap(
         address _from,
         address _to,
         address _recipient
-    ) internal returns (uint256[] memory amounts) {
+    ) internal virtual returns (uint256[] memory amounts) {
         uint256 _bal = IERC20(_from).balanceOf(address(this));
         IERC20(_from).safeApprove(DEX, _bal);
 
@@ -76,7 +84,7 @@ contract UniswapRouter {
         address _to,
         address _recipient,
         uint256 _amountOut
-    ) internal returns (uint256[] memory amounts) {
+    ) internal virtual returns (uint256[] memory amounts) {
         uint256 _bal = IERC20(_from).balanceOf(address(this));
 
         address[] memory _path = new address[](3);
@@ -94,11 +102,11 @@ contract UniswapRouter {
             );
     }
 
-    function _swapExactERC20ForWETHViaUniswap(
+    function _swapExactERC20ForETHViaUniswap(
         address _from,
         address _recipient,
         uint256 _amountIn
-    ) internal returns (uint256[] memory amounts) {
+    ) internal virtual returns (uint256[] memory amounts) {
         uint256 _bal = IERC20(_from).balanceOf(address(this));
         IERC20(_from).safeApprove(DEX, _bal);
 
@@ -116,11 +124,26 @@ contract UniswapRouter {
             );
     }
 
-    function _swapWETHForExactERC20ViaUniswap(
+    function _swapETHForExactERC20ViaUniswap(
         address _to,
         address _recipient,
         uint256 _amountOut
-    ) internal returns (uint256[] memory amounts) {
+    ) internal virtual returns (uint256[] memory amounts) {
+        address[] memory _path = new address[](2);
+        _path[0] = WETH;
+        _path[1] = _to;
+
+        bytes memory _data = abi.encodeWithSelector(Uni(DEX).swapETHForExactTokens.selector, _amountOut, _path, _recipient, now.add(1800));
+
+        (bool success, ) = DEX.call{value:address(this).balance}(_data);
+        require(success, "_swapETHForExactERC20ViaUniswap: uniswap swap failed.");
+    }
+
+    function _swapExactETHForERC20ViaUniswap(
+        address _to,
+        address _recipient,
+        uint256 _amountOutMin
+    ) internal virtual returns (uint256[] memory amounts) {
         uint256 _bal = IERC20(WETH).balanceOf(address(this));
         IERC20(WETH).safeApprove(DEX, _bal);
 
@@ -128,12 +151,9 @@ contract UniswapRouter {
         _path[0] = WETH;
         _path[1] = _to;
 
-        return
-            Uni(DEX).swapETHForExactTokens(
-                _amountOut,
-                _path,
-                _recipient,
-                now.add(1800)
-            );
+        bytes memory _data = abi.encodeWithSelector(Uni(DEX).swapExactETHForTokens.selector, _amountOutMin, _path, _recipient, now.add(1800));
+
+        (bool success, ) = DEX.call{value:address(this).balance}(_data);
+        require(success, "_swapExactETHForERC20ViaUniswap: uniswap swap failed.");
     }
 }

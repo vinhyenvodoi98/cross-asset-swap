@@ -8,7 +8,6 @@ import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./dexes/nft20/Nft20Router.sol";
-import "./dexes/nftx/NftxRouter.sol";
 import "./dexes/uniswap/UniswapRouter.sol";
 
 contract NFT20Swapper is
@@ -16,68 +15,12 @@ contract NFT20Swapper is
     IERC1155Receiver,
     Ownable,
     UniswapRouter,
-    Nft20Router,
-    NftxRouter
+    Nft20Router
 {
     struct ERC20Details {
         address[] tokenAddrs;
         uint256[] amounts;
     }
-
-    struct ERC721Details {
-        address[] tokenAddrs;
-        uint256[] ids;
-    }
-
-    struct ERC1155Details {
-        address[] tokenAddrs;
-        uint256[] ids;
-        uint256[] amounts;
-    }
-
-    // bytes4 private constant _INTERFACE_ID_ERC1155 = 0xd9b67a26;
-    // bytes4 private constant _ERC721_RECEIVED = 0x150b7a02;
-
-    // swaps any combination of ERC-20/721/1155
-    // User needs to approve assets before invoking swap
-    /* function swap(
-        ERC20Details calldata inputERC20s,
-        ERC721Details calldata inputERC721s,
-        ERC1155Details calldata inputERC1155s,
-        ERC20Details calldata outputERC20s,
-        ERC721Details calldata outputERC721s,
-        ERC1155Details calldata outputERC1155s
-    ) external {
-        // transfer ERC20 tokens from the sender to this contract
-        // WARNING: It is assumed that the ERC20 token addresses are NOT malicious
-        for (uint256 i = 0; i < inputERC20s.tokenAddrs.length; i++) {
-            IERC20(inputERC20s.tokenAddrs[i]).transferFrom(
-                msg.sender,
-                address(this),
-                inputERC20s.amounts[i]
-            );
-        }
-        // transfer ERC721 tokens from the sender to this contract
-        // WARNING: It is assumed that the ERC721 token addresses are NOT malicious
-        for (uint256 i = 0; i < inputERC721s.tokenAddrs.length; i++) {
-            IERC721(inputERC721s.tokenAddrs[i]).transferFrom(
-                msg.sender,
-                address(this),
-                inputERC721s.ids[i]
-            );
-        }
-        // transfer ERC1155 tokens from the sender to this contract
-        // WARNING: It is assumed that the ERC1155 token addresses are NOT malicious
-        for (uint256 i = 0; i < inputERC1155s.tokenAddrs.length; i++) {
-            IERC1155(inputERC1155s.tokenAddrs[i]).safeBatchTransferFrom(
-                msg.sender,
-                address(this),
-                inputERC1155s.ids[i],
-                inputERC1155s.amounts[i],
-                ""
-            );
-        }
-    } */
 
     function _swapExactERC20ForETH(
         address _from,
@@ -133,7 +76,6 @@ contract NFT20Swapper is
     ) virtual external payable {
         // ETH -> eq. ERC20 -> ERC721(s)
         // Convert ETH to eq. ERC20
-        // TODO: Make sure that there is NO eq. ERC20 left in the contract after the swap
         _swapETHForExactERC20(
             nftToErc20[toNft],
             address(this),
@@ -172,7 +114,6 @@ contract NFT20Swapper is
         }
 
         // ETH -> Eq. ERC20
-        // TODO: Make sure that there is NO eq. ERC20 left in the contract after the swap
         _swapETHForExactERC20(nftToErc20[toNft], address(this), totalAmount*NFT20_NFT_VALUE);
 
         // Convert eq. ERC20 to ERC721(s)
@@ -210,7 +151,7 @@ contract NFT20Swapper is
 
         uint256[] memory amounts;
 
-         // Eq. ERC20 -> ERC721
+        // Eq. ERC20 -> ERC721
         _swapERC20EquivalentForNFTViaNft20(
             nftToErc20[toNft],
             toIds,
@@ -218,10 +159,16 @@ contract NFT20Swapper is
             msg.sender
         );
 
-        // Return the dust in changeIn asset if WETH balance is greater than 0
-        uint256 _amount = IERC20(WETH).balanceOf(address(this));
-        if((changeIn != WETH) && (_amount > 0)) {
-            _swapExactERC20ForERC20(WETH, changeIn, msg.sender);
+        // Return the dust in changeIn asset if ETH balance is greater than 0
+        if(address(this).balance > 0) {
+            if(changeIn != ETH) {
+                _swapExactETHForERC20ViaUniswap(changeIn, msg.sender, 0);
+            }
+            else {
+                // Transfer remaining ETH to the msg.sender
+                (bool success, ) = msg.sender.call{value:address(this).balance}("");
+                require(success, "swapERC20ForERC721: ETH dust transfer failed.");
+            }
         }
     }
 
@@ -257,10 +204,16 @@ contract NFT20Swapper is
             msg.sender
         );
 
-        // Return the dust in changeIn asset if WETH balance is greater than 0
-        totalAmount = IERC20(WETH).balanceOf(address(this));
-        if((changeIn != WETH) && (totalAmount > 0)) {
-            _swapExactERC20ForERC20(WETH, changeIn, msg.sender);
+        // Return the dust in changeIn asset if ETH balance is greater than 0
+        if(address(this).balance > 0) {
+            if(changeIn != ETH) {
+                _swapExactETHForERC20ViaUniswap(changeIn, msg.sender, 0);
+            }
+            else {
+                // Transfer remaining ETH to the msg.sender
+                (bool success, ) = msg.sender.call{value:address(this).balance}("");
+                require(success, "swapERC20ForERC1155: ETH dust transfer failed.");
+            }
         }
     }
 
@@ -383,7 +336,7 @@ contract NFT20Swapper is
             (address[], uint256[], uint256[])
         );
 
-        uint256[] memory _fromIds;
+        uint256[] memory _fromIds = new uint256[](1);
         _fromIds[0] = _tokenId;
 
         // Convert ERC721 to its ERC20 equivalent
@@ -418,6 +371,15 @@ contract NFT20Swapper is
                 _toAmounts,
                 _from
             );
+
+            // Handle special cases where we cannot directly send NFTs to the recipient
+            if(
+                _decodedAddrs[0] == 0x7CdC0421469398e0F3aA8890693d86c840Ac8931 || // Doki Doki
+                _decodedAddrs[0] == 0x89eE76cC25Fcbf1714ed575FAa6A10202B71c26A || // Node Runners
+                _decodedAddrs[0] == 0xC805658931f959abc01133aa13fF173769133512    // Chonker Finance
+            ) {
+                IERC1155(_decodedAddrs[0]).safeBatchTransferFrom(address(this), _from, _toIds, _toAmounts, "");
+            }
 
             // convert remaining desired ERC20 equivalent to desired change
             if (nftToErc20[_decodedAddrs[0]] != _decodedAddrs[1]) {
@@ -471,4 +433,6 @@ contract NFT20Swapper is
             IERC1155(asset).safeTransferFrom(address(this), recipient, ids[i], amounts[i], "");
         }
     }
+
+    receive() external payable {}
 }

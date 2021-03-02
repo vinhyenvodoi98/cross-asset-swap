@@ -28,29 +28,37 @@ contract Nft20Router is Ownable {
 
     constructor() public {
         // add existing nftToErc20
-        nftToErc20[0xc58641ae25d1e368393cad5cce2cca3c80d8fff6] = 0xc7e5e9434f4a71e6db978bd65b4d61d3593e5f27; // Alpaca City
-        nftToErc20[0xb32ca105f6cce99074c58b349d095243b6060303] = 0x6fa769eed284a94a73c15299e1d3719b29ae2f52; // BFH Unit
-        nftToErc20[0x57c31c042cb2f6a50f3da70ade4fee20c86b7493] = 0xb80fbf6cdb49c33dc6ae4ca11af8ac47b0b4c0f3; // Block Art
-        nftToErc20[0x5e8da1dae500ff338a2fa66b66c9611288d3f4a7] = 0x2f2d5aa0efdb9ca3c9bb789693d06bebea88792f; // Block Cities
-        nftToErc20[0xadbebbd65a041e3aeb474fe9fe6939577eb2544f] = 0xc805658931f959abc01133aa13ff173769133512; // CHONKER20
-        nftToErc20[0xf395f74ca8f7ad4a1f98bbc92cf9a80be1c7b098] = 0x155cbbca1ab35eab09b66270046317803919e555; // CryptoTendies
-        nftToErc20[0x27109ac6b0cc8da16b30a7bea826091797cdf36c] = 0xa58b5224e2fd94020cb2837231b2b0e4247301a6; // Crypto Vexels Wearables
-        nftToErc20[0x1e0cd9506d465937e9d6754e76cd389a8bd90fbf] = 0xf87e31492faf9a91b02ee0deaad50d51d56d5d4d; // DECENTRALAND
-        nftToErc20[0x22c4ad011cce6a398b15503e0ab64286568933ed] = 0x7cdc0421469398e0f3aa8890693d86c840ac8931; // dokidoki20
-        nftToErc20[0x21993ed38dcbb8e1612f34676a3d249b5de538a0] = 0x33b83b6d3179dcb4094c685c2418cab06372ed89; // ETH-MEN
-        nftToErc20[0x5b78efdcc5ff2ecc141323491ba194293b955e81] = 0x443b862d3815b1898e85085cafca57fc4335a1be; // Golfer
-        nftToErc20[0xc2bde1a2fa26890c8e6acb10c91cc6d9c11f4a73] = 0xc2c747e0f7004f9e8817db2ca4997657a7746928; // Hashmasks
-        nftToErc20[0x60acd58d00b2bcc9a8924fdaa54a2f7c0793b3b2] = 0xe4605d46fd0b3f8329d936a8b258d69276cba264; // MEME LTD
-        nftToErc20[0x746b9ddf6ddaf05b57f25434d22020f320cf5842] = 0xf9b3b38a458c2512b6680e1f3bc7a022e97d7dab; // MoonBase
-        nftToErc20[0x28fa4deb8354f3c4f8d8f7dc095c7ddf5c4ba607] = 0x73e7db3cda787a60a75496ee07078fb11c3a4c88; // NFT20 WRAPLP
-        nftToErc20[0x303af77cf2774aabff12462c110a0ccf971d7dbe] = 0x89ee76cc25fcbf1714ed575faa6a10202b71c26a; // NodeRunners
-        nftToErc20[0xff22233156b0a4ae0172825e6891887e8f9d2585] = 0xcb6768a968440187157cfe13b67cac82ef6cc5a4; // Pepemon
-        nftToErc20[0x4df386e4314644ebc7fb67359b83d17977b41c6d] = 0xba8cdaa1c4c294ad634ab3c6ee0fa82d0a019727; // PolkaPets
-        nftToErc20[0xb3cdc594d8c8e8152d99f162cf8f9edfdc0a80a2] = 0xdb68df0e86bc7c6176e6a2255a5365f51113bce8; // ROPE
-        nftToErc20[0x7c63164d2e50618c5497ef1e1fbd686e06b7cc12] = 0x5351105753bdbc3baa908a0c04f1468535749c3d; // Rude Boy
-        nftToErc20[0x26080d657a8c52119d0973d0c7ffdb25e7b9b219] = 0xa342f5d851e866e18ff98f351f2c6637f4478db5; // Sandbox's assets
-        nftToErc20[0x793424220968d59fc1a319d434550982708cf6b6] = 0x629a673a8242c2ac4b7b8c5d8735fbeac21a6205; // SORARE
-        nftToErc20[0x6e9ad2f0bd0657c6a168375d21f865e33e8f0112] = 0xf4680c917a873e2dd6ead72f9f433e74eb9c623c; // Twerky Pepe
+        nftToErc20[0x274E21d314A915d1504060d4351DdE05d4dC031e] = 0x7a911C71144f4d5a00E4216b1c5b12D9571E9336; // AAH
+        nftToErc20[0xC7e5e9434f4a71e6dB978bD65B4D61D3593e5f27] = 0xC58641aE25D1E368393cad5CCe2CcA3C80D8fFF6; // Alpaca City
+        nftToErc20[0x6Fa769EED284a94A73C15299e1D3719B29Ae2F52] = 0xB32ca105F6CCe99074C58B349d095243B6060303; // BFH Unit
+        nftToErc20[0xb80fBF6cdb49c33dC6aE4cA11aF8Ac47b0b4C0f3] = 0x57C31c042Cb2F6a50F3dA70ADe4fEE20C86B7493; // Block Art
+        nftToErc20[0x2f2d5aA0EfDB9Ca3C9bB789693d06BEBEa88792F] = 0x5e8DA1DAE500Ff338a2fa66b66c9611288d3f4a7; // Block Cities
+        nftToErc20[0xC805658931f959abc01133aa13fF173769133512] = 0xaDBEBbd65a041E3AEb474FE9fe6939577eB2544F; // CHONKER20
+        nftToErc20[0x155CBbcA1Ab35Eab09b66270046317803919E555] = 0xf395F74CA8f7AD4a1f98bBc92cf9a80be1C7B098; // CryptoTendies
+        nftToErc20[0xa58b5224e2FD94020cb2837231B2B0E4247301A6] = 0x27109aC6B0Cc8DA16B30a7BEA826091797CdF36C; // Crypto Vexels Wearables
+        nftToErc20[0xF87E31492Faf9A91B02Ee0dEAAd50d51d56D5d4d] = 0x1E0CD9506d465937E9d6754e76Cd389A8bD90FBf; // DECENTRALAND
+        nftToErc20[0x7CdC0421469398e0F3aA8890693d86c840Ac8931] = 0x22C4AD011Cce6a398B15503e0aB64286568933Ed; // dokidoki20
+        nftToErc20[0x44d6E8933F8271abcF253C72f9eD7e0e4C0323B3] = 0xB308A5E7cD9534916dB44ee5EC24776654916260; // Don't Rug Me
+        nftToErc20[0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85] = 0x983021062BC9aA395794C015f9E35AAbBd17Cbd9; // ENS
+        nftToErc20[0x33b83B6D3179dCb4094c685C2418cab06372eD89] = 0x21993Ed38dCbB8e1612F34676a3D249B5dE538a0; // ETH-MEN
+        nftToErc20[0x8754F54074400CE745a7CEddC928FB1b7E985eD6] = 0x65f304BFb9DEE92fa77363e7390658063cea6260; // EULER BEATS
+        nftToErc20[0xc36cF0cFcb5d905B8B513860dB0CFE63F6Cf9F5c] = 0x2E9653caE7f431411727Cdf5581C7fB5fc23bA57; // Gala Games
+        nftToErc20[0x443B862d3815b1898e85085cAfcA57fC4335a1BE] = 0x5b78eFDcc5ff2ECC141323491BA194293b955E81; // Golfer
+        nftToErc20[0xC2C747E0F7004F9E8817Db2ca4997657a7746928] = 0xc2BdE1A2fA26890c8E6AcB10C91CC6D9c11F4a73; // Hashmasks
+        nftToErc20[0xe4605d46Fd0B3f8329d936a8b258D69276cBa264] = 0x60ACD58d00b2BcC9a8924fdaa54A2F7C0793B3b2; // MEME LTD
+        nftToErc20[0xF9b3B38A458c2512b6680e1F3bc7A022e97D7DAb] = 0x746b9ddF6DdaF05B57F25434d22020F320Cf5842; // MoonBase
+        nftToErc20[0x73e7dB3cDA787a60a75496Ee07078FB11C3A4c88] = 0x28fa4dEB8354f3c4f8D8f7DC095C7ddF5c4ba607; // NFT20 WRAPLP
+        nftToErc20[0x89eE76cC25Fcbf1714ed575FAa6A10202B71c26A] = 0x303Af77Cf2774AABff12462C110A0CCf971D7DbE; // NodeRunners
+        nftToErc20[0xCB6768a968440187157Cfe13b67Cac82ef6cc5a4] = 0xFF22233156b0A4Ae0172825E6891887e8F9d2585; // Pepemon
+        nftToErc20[0xba8cDaa1C4C294aD634ab3c6Ee0FA82D0A019727] = 0x4df386E4314644ebC7fB67359b83d17977b41c6D; // PolkaPets
+        nftToErc20[0xDb68Df0e86Bc7C6176E6a2255a5365f51113BCe8] = 0xB3CDC594D8C8e8152d99F162cF8f9eDFdc0A80A2; // ROPE
+        nftToErc20[0x5351105753Bdbc3Baa908A0c04F1468535749c3D] = 0x7c63164d2E50618c5497ef1e1FBD686e06b7cc12; // Rude Boy
+        nftToErc20[0xa342f5D851E866E18ff98F351f2c6637f4478dB5] = 0x26080d657A8c52119d0973d0C7FfDB25E7B9b219; // Sandbox's assets
+        nftToErc20[0x1ca3262009b21F944e6b92a2a88D039D06F1acFa] = 0x8cd81fB9282eC1Cb6d33542eDC2B562644C589cC; // Sergs
+        nftToErc20[0x629A673A8242c2AC4B7B8C5D8735fbeac21A6205] = 0x793424220968D59FC1A319D434550982708CF6B6; // SORARE
+        nftToErc20[0xf4680c917A873E2dd6eAd72f9f433e74EB9c623C] = 0x6E9AD2F0Bd0657C6a168375D21f865e33E8f0112; // Twerky Pepe
+        nftToErc20[0xD1E5b0FF1287aA9f9A268759062E4Ab08b9Dacbe] = 0xb9033e85994453c3E35Bce6FDd1D9fe601492C2a; // Unstoppable Domains
+        nftToErc20[0xFf488FD296c38a24CCcC60B43DD7254810dAb64e] = 0x96d697A661207A829d2a2C208836A41d76bdae75; // Zed Run
     }
 
     function addNftToErc20(address nft, address erc20) external onlyOwner {
@@ -148,7 +156,7 @@ contract Nft20Router is Ownable {
         address _fromERC20,
         uint256[] memory _ids,
         uint256[] memory _amounts,
-        address recipient
+        address _recipient
     ) internal {
         require(
             _fromERC20 != address(0),
@@ -164,10 +172,16 @@ contract Nft20Router is Ownable {
             _fromERC20 == 0x303Af77Cf2774AABff12462C110A0CCf971D7DbE || // Node Runners
             _fromERC20 == 0xaDBEBbd65a041E3AEb474FE9fe6939577eB2544F    // Chonker Finance
         ) {
-            INFT20Pair(_fromERC20).withdraw(_ids, _amounts);                
+            for(uint256 i = 0; i < _ids.length; i++) {
+                uint256[] memory _tempIds = new uint256[](1);
+                uint256[] memory _tempAmounts = new uint256[](1);
+                _tempIds[0] =  _ids[i];
+                _tempAmounts[0] =  _amounts[i];
+                INFT20Pair(_fromERC20).withdraw(_tempIds, _tempAmounts);
+            }
         }
         else {
-            INFT20Pair(_fromERC20).withdraw(_ids, _amounts, recipient);
+            INFT20Pair(_fromERC20).withdraw(_ids, _amounts, _recipient);
         }
     }
 }
