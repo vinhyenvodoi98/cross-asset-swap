@@ -1,6 +1,5 @@
 import pytest
 from brownie import *
-from eth_abi import encode_abi
 import typer
 
 
@@ -12,7 +11,7 @@ def loadAssets(deployer, eth_bag):
 def test_swapETHToHashmask(swapper, deployer, dai, hashmaskNft):
     toNft = hashmaskNft.address
 
-    toIds = [15329, 16254]
+    toIds = [16023, 15929]
     changeIn = dai.address
 
     daiBalBefore = dai.balanceOf(deployer['from'])
@@ -36,6 +35,10 @@ def test_swapETHToMeme(swapper, deployer, dai, memeNft):
 
     toIds = [33, 27]
     toAmounts = [2, 2]
+    toBalBefore = [0, 0]
+
+    for i in range(0, len(toIds)):
+        assert toBalBefore[i] == memeNft.balanceOf(deployer['from'], toIds[i])
 
     changeIn = dai.address
 
@@ -52,4 +55,4 @@ def test_swapETHToMeme(swapper, deployer, dai, memeNft):
     assert ethBalBefore > ethBalAfter
 
     for i in range(0, len(toIds)):
-        assert memeNft.balanceOf(deployer['from'], toIds[i]) == toAmounts[i]
+        assert memeNft.balanceOf(deployer['from'], toIds[i]) == toAmounts[i] + toBalBefore[i]

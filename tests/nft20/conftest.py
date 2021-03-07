@@ -35,6 +35,12 @@ def dai():
 def usdc():
     return Contract("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48")
 @pytest.fixture(scope="module", autouse=True)
+def usdt():
+    return Contract("0xdAC17F958D2ee523a2206206994597C13D831ec7")
+@pytest.fixture(scope="module", autouse=True)
+def tusd():
+    return Contract("0x0000000000085d4780B73119b644AE5ecd22b376")
+@pytest.fixture(scope="module", autouse=True)
 def eth_bag(accounts):
     return accounts.at("0x829BD824B016326A401d083B33D092293333A830", force=True)
 @pytest.fixture(scope="module", autouse=True)
@@ -67,6 +73,9 @@ def ETH_ADDRESS():
 @pytest.fixture(scope="module", autouse=True)
 def hashmaskIds():
     return [3790,3791,3792,3793,3794,3795,3796,3797,3798,3799,3800] 
+@pytest.fixture(scope="module", autouse=True)
+def blockartIds():
+    return [227, 228]
 @pytest.fixture(scope="module", autouse=True)
 def swapper(deployer):
     return NFT20Swapper.deploy(deployer)

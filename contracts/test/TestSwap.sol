@@ -73,6 +73,7 @@ contract TestSwap is IERC721Receiver, IERC1155Receiver {
         address[] calldata _addrs
     ) external {
         bytes memory _data = abi.encode(_addrs, _toIds, _toAmounts);
+        emit Data(_data);
         IERC721(_fromERC721).safeTransferFrom(
             address(this),
             _swap,
@@ -80,7 +81,7 @@ contract TestSwap is IERC721Receiver, IERC1155Receiver {
             _data
         );
     }
-
+    event Data(bytes data);
     function swapERC20ForERC1155(
         address _swap,
         NFT20Swapper.ERC20Details calldata fromERC20s,
@@ -164,10 +165,10 @@ contract TestSwap is IERC721Receiver, IERC1155Receiver {
     }
 
     function onERC721Received(
-        address operator,
-        address from,
-        uint256 tokenId,
-        bytes calldata data
+        address,
+        address,
+        uint256,
+        bytes calldata
     ) external override returns (bytes4) {
         return this.onERC721Received.selector;
     }

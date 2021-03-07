@@ -1,6 +1,5 @@
 import pytest
 from brownie import *
-from eth_abi import encode_abi
 import typer
 
 @pytest.fixture(scope="module", autouse=True)
@@ -17,7 +16,7 @@ def test_swapMemeToHashMask(swapper, user, deployer, memeNft, hashmaskNft, dai, 
     addrs = [toNFT, changeIn]
     fromIds = [1, 27]
     fromAmounts = [700, 226]
-    toIds = [15329, 16254]
+    toIds = [16023, 15929]
     toAmounts = [1,1]
 
     daiBalBefore = dai.balanceOf(user.address)

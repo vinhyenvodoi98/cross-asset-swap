@@ -86,6 +86,7 @@ contract UniswapRouter {
         uint256 _amountOut
     ) internal virtual returns (uint256[] memory amounts) {
         uint256 _bal = IERC20(_from).balanceOf(address(this));
+        IERC20(_from).safeApprove(DEX, _bal);
 
         address[] memory _path = new address[](3);
         _path[0] = _from;
@@ -128,7 +129,7 @@ contract UniswapRouter {
         address _to,
         address _recipient,
         uint256 _amountOut
-    ) internal virtual returns (uint256[] memory amounts) {
+    ) internal virtual /* returns (uint256[] memory amounts) */ {
         address[] memory _path = new address[](2);
         _path[0] = WETH;
         _path[1] = _to;
@@ -143,10 +144,7 @@ contract UniswapRouter {
         address _to,
         address _recipient,
         uint256 _amountOutMin
-    ) internal virtual returns (uint256[] memory amounts) {
-        uint256 _bal = IERC20(WETH).balanceOf(address(this));
-        IERC20(WETH).safeApprove(DEX, _bal);
-
+    ) internal virtual /* returns (uint256[] memory amounts) */ {
         address[] memory _path = new address[](2);
         _path[0] = WETH;
         _path[1] = _to;

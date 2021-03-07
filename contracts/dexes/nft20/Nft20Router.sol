@@ -71,24 +71,12 @@ contract Nft20Router is Ownable {
         address _fromERC721,
         uint256[] memory _ids
     ) internal returns (address _erc20Address, uint256 _erc20Amount) {
-        require(
-            _fromERC721 != address(0),
-            "_swapERC721ForERC20EquivalentViaNft20: empty _fromERC721 address"
-        );
-        require(
-            nftToErc20[_fromERC721] != address(0),
-            "_swapERC721ForERC20EquivalentViaNft20: supplied _fromERC721 not supported"
-        );
-        require(
-            _ids.length > 0,
-            "_swapERC721ForERC20EquivalentViaNft20: empty _ids"
-        );
         for (uint256 i = 0; i < _ids.length; i++) {
             IERC721(_fromERC721).safeTransferFrom(
                 address(this),
                 nftToErc20[_fromERC721],
                 _ids[i],
-                address(this)
+                abi.encodePacked(address(this))
             );
         }
         return (
@@ -102,20 +90,12 @@ contract Nft20Router is Ownable {
         uint256 _id,
         uint256 _amount
     ) internal returns (address erc20, uint256 amount) {
-        require(
-            _fromERC1155 != address(0),
-            "_swapERC1155ForERC20EquivalentViaNft20: empty _fromERC1155 address"
-        );
-        require(
-            nftToErc20[_fromERC1155] != address(0),
-            "_swapERC1155ForERC20EquivalentViaNft20: supplied _fromERC1155 not supported"
-        );
         IERC1155(_fromERC1155).safeTransferFrom(
             address(this),
             nftToErc20[_fromERC1155],
             _id,
             _amount,
-            address(this)
+            abi.encodePacked(address(this))
         );
         return (
             nftToErc20[_fromERC1155],
@@ -128,24 +108,12 @@ contract Nft20Router is Ownable {
         uint256[] memory _ids,
         uint256[] memory _amounts
     ) internal returns (address erc20, uint256 amount) {
-        require(
-            _fromERC1155 != address(0),
-            "_swapERC1155BatchForERC20EquivalentViaNft20: empty _fromERC1155 address"
-        );
-        require(
-            nftToErc20[_fromERC1155] != address(0),
-            "_swapERC1155BatchForERC20EquivalentViaNft20: supplied _fromERC1155 not supported"
-        );
-        require(
-            _ids.length > 0,
-            "_swapERC1155BatchForERC20EquivalentViaNft20: empty _ids"
-        );
         IERC1155(_fromERC1155).safeBatchTransferFrom(
             address(this),
             nftToErc20[_fromERC1155],
             _ids,
             _amounts,
-            address(this)
+            abi.encodePacked(address(this))
         );
         return (
             nftToErc20[_fromERC1155],
@@ -159,15 +127,6 @@ contract Nft20Router is Ownable {
         uint256[] memory _amounts,
         address _recipient
     ) internal {
-        require(
-            _fromERC20 != address(0),
-            "_swapERC20EquivalentForNFTViaNft20: empty _fromERC20 address"
-        );
-        require(
-            _ids.length > 0,
-            "_swapERC20EquivalentForNFTViaNft20: empty _ids"
-        );
-
         if(
             _fromERC20 == 0x22C4AD011Cce6a398B15503e0aB64286568933Ed || // Doki Doki
             _fromERC20 == 0x303Af77Cf2774AABff12462C110A0CCf971D7DbE || // Node Runners

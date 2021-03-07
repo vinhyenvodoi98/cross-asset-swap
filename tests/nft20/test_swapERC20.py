@@ -1,6 +1,5 @@
 import pytest
 from brownie import *
-from eth_abi import encode_abi
 import typer
 
 
@@ -14,7 +13,7 @@ def test_swapDaiToHashmask(swapper, hashmaskNft, dai, usdc, deployer):
 
     toNft = hashmaskNft.address
 
-    toIds = [16254, 16023]
+    toIds = [16023, 15929]
     toAmounts = [1,1]
 
     changeIn = usdc.address
