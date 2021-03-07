@@ -87,7 +87,8 @@ contract Nft20Router is Ownable {
             IERC721(_fromERC721).safeTransferFrom(
                 address(this),
                 nftToErc20[_fromERC721],
-                _ids[i]
+                _ids[i],
+                address(this)
             );
         }
         return (
@@ -114,7 +115,7 @@ contract Nft20Router is Ownable {
             nftToErc20[_fromERC1155],
             _id,
             _amount,
-            ""
+            address(this)
         );
         return (
             nftToErc20[_fromERC1155],
@@ -144,7 +145,7 @@ contract Nft20Router is Ownable {
             nftToErc20[_fromERC1155],
             _ids,
             _amounts,
-            ""
+            address(this)
         );
         return (
             nftToErc20[_fromERC1155],
