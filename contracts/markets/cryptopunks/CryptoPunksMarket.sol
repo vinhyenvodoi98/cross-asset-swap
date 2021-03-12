@@ -3,6 +3,8 @@
 pragma solidity ^0.6.0;
 pragma experimental ABIEncoderV2;
 
+import "@openzeppelinV2/contracts/math/SafeMath.sol";
+
 interface ICryptoPunks {
 
     struct Offer {
@@ -20,35 +22,37 @@ interface ICryptoPunks {
 
 contract CryptoPunksMarket {
 
+    using SafeMath for uint256;
+
     address public CRYPTOPUNKS = 0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB;
 
-    function buyPunksFromMarket(uint256[] memory punkIndexes) public {
+    function buyAssetsFromCryptoPunkMarket(uint256[] memory punkIndexes) public {
         for (uint256 i = 0; i < punkIndexes.length; i++) {
-            ICryptoPunks.Offer memory offer = ICryptoPunks(CRYPTOPUNKS).punksOfferedForSale(punkIndexes[i]);
             if(offer.isForSale) {
-                _buyPunk(punkIndexes[i], offer.minValue);
-            }
-        } 
-    }
-
-    function estimeTotalCostInEth(uint256[] memory punkIndexes) public view returns(uint256 totalCost) {
-        for (uint256 i = 0; i < punkIndexes.length; i++) {
-            ICryptoPunks.Offer memory offer = ICryptoPunks(CRYPTOPUNKS).punksOfferedForSale(punkIndexes[i]);
-            if(offer.isForSale) {
-                totalCost += offer.minValue;
+                _buyPunk(punkIndexes[i], estimateCryptoPunkAssetPriceInEth(punkIndexes[i]));
             }
         }
     }
 
-    function estimeTotalCostInERC20(uint256[] memory punkIndexes, address asset) public view {
-
+    function estimateCryptoPunkAssetPriceInEth(uint256 punkIndex) public view returns(uint256) {
+        return ICryptoPunks(CRYPTOPUNKS).punksOfferedForSale(punkIndex).minValue;
     }
 
-    function _buyPunk(uint256 _index, uint256 _price) internal {
+    function estimateBatchCryptoPunkAssetPriceInEth(uint256[] memory punkIndexes) public view returns(uint256 totalCost) {
+        ICryptoPunks.Offer memory offer;
+        for (uint256 i = 0; i < punkIndexes.length; i++) {
+            offer = ICryptoPunks(CRYPTOPUNKS).punksOfferedForSale(punkIndexes[i]);
+            if(offer.isForSale) {
+                totalCost = totalCost.add(offer.minValue);
+            }
+        }
+    }
+
+    function _buyAssetFromCryptoPunkMarket(uint256 _index, uint256 _price) internal {
         bytes memory _data = abi.encodeWithSelector(ICryptoPunks(CRYPTOPUNKS).buyPunk.selector, _index);
 
         (bool success, ) = CRYPTOPUNKS.call{value:_price}(_data);
-        require(success, "_buyPunk: cryptopunk buy failed.");
+        require(success, "_buyAssetFromCryptoPunkMarket: cryptopunk buy failed.");
     }
 
 }
