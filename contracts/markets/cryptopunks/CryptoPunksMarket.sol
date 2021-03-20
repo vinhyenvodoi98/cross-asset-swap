@@ -26,17 +26,27 @@ contract CryptoPunksMarket {
 
     address public CRYPTOPUNKS = 0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB;
 
-    function buyAssetsFromCryptoPunkMarket(uint256[] memory punkIndexes) public {
+    function buyAssetsForEth(bytes memory data) public {
+        uint256[] memory punkIndexes;
+        (punkIndexes) = abi.decode(
+            data,
+            (uint256[])
+        );
         for (uint256 i = 0; i < punkIndexes.length; i++) {
-            _buyAssetFromCryptoPunkMarket(punkIndexes[i], estimateCryptoPunkAssetPriceInEth(punkIndexes[i]));
+            _buyAssetForEth(punkIndexes[i], estimateAssetPriceInEth(punkIndexes[i]));
         }
     }
 
-    function estimateCryptoPunkAssetPriceInEth(uint256 punkIndex) public view returns(uint256) {
+    function estimateAssetPriceInEth(uint256 punkIndex) public view returns(uint256) {
         return ICryptoPunks(CRYPTOPUNKS).punksOfferedForSale(punkIndex).minValue;
     }
 
-    function estimateBatchCryptoPunkAssetPriceInEth(uint256[] memory punkIndexes) public view returns(uint256 totalCost) {
+    function estimateBatchAssetPriceInEth(bytes memory data) public view returns(uint256 totalCost) {
+        uint256[] memory punkIndexes;
+        (punkIndexes) = abi.decode(
+            data,
+            (uint256[])
+        );
         ICryptoPunks.Offer memory offer;
         for (uint256 i = 0; i < punkIndexes.length; i++) {
             offer = ICryptoPunks(CRYPTOPUNKS).punksOfferedForSale(punkIndexes[i]);
@@ -46,11 +56,11 @@ contract CryptoPunksMarket {
         }
     }
 
-    function _buyAssetFromCryptoPunkMarket(uint256 _index, uint256 _price) internal {
+    function _buyAssetForEth(uint256 _index, uint256 _price) internal {
         bytes memory _data = abi.encodeWithSelector(ICryptoPunks(CRYPTOPUNKS).buyPunk.selector, _index);
 
         (bool success, ) = CRYPTOPUNKS.call{value:_price}(_data);
-        require(success, "_buyAssetFromCryptoPunkMarket: cryptopunk buy failed.");
+        require(success, "_buyAssetForEth: cryptopunk buy failed.");
     }
 
 }

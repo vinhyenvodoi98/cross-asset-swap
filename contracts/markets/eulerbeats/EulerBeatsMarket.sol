@@ -42,27 +42,37 @@ contract EulerBeatsMarket {
     address public EULERBEATS = 0x8754F54074400CE745a7CEddC928FB1b7E985eD6;
     address public PRINTINGPRESS = 0x8Cac485c30641ece09dBeB2b5245E24dE4830F27;
 
-    function buyAssetsFromEulerBeatsMarket(uint256[] memory seeds) public {
+    function buyAssetsFromMarket(bytes memory data) public {
+        uint256[] memory seeds;
+        (seeds) = abi.decode(
+            data,
+            (uint256[])
+        );
         for (uint256 i = 0; i < seeds.length; i++) {
-            _buyAssetFromEulerBeatsMarket(seeds[i], estimateEulerBeatsAssetPriceInEth(seeds[i]));
+            _buyAssetFromMarket(seeds[i], estimateAssetPriceInEth(seeds[i]));
         }
     }
 
-    function estimateEulerBeatsAssetPriceInEth(uint256 seed) public view returns(uint256) {
+    function estimateAssetPriceInEth(uint256 seed) public view returns(uint256) {
         // Get price to mint the next print
         return IEulerBeats(EULERBEATS).getPrintPrice(IEulerBeats(EULERBEATS).seedToPrintsSupply(seed) + 1);
     }
 
-    function estimateBatchEulerBeatsAssetPriceInEth(uint256[] memory seeds) public view returns(uint256 totalCost) {
+    function estimateBatchAssetPriceInEth(bytes memory data) public view returns(uint256 totalCost) {
+        uint256[] memory seeds;
+        (seeds) = abi.decode(
+            data,
+            (uint256[])
+        );
         for (uint256 i = 0; i < seeds.length; i++) {
             totalCost += IEulerBeats(EULERBEATS).getPrintPrice(IEulerBeats(EULERBEATS).seedToPrintsSupply(seeds[i]) + 1);
         }
     }
 
-    function _buyAssetFromEulerBeatsMarket(uint256 _seed, uint256 _price) internal {
+    function _buyAssetFromMarket(uint256 _seed, uint256 _price) internal {
         bytes memory _data = abi.encodeWithSelector(IEulerBeats(PRINTINGPRESS).mintPrint.selector, _seed, IEulerBeats(EULERBEATS).seedToOwner(_seed));
 
         (bool success, ) = PRINTINGPRESS.call{value:_price}(_data);
-        require(success, "_buyAssetFromEulerBeatsMarket: EulerBeats buy failed.");
+        require(success, "_buyAssetFromMarket: EulerBeats buy failed.");
     }
 }

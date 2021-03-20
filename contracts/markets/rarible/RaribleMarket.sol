@@ -65,19 +65,19 @@ contract RaribleMarket {
 
     address public RARIBLE = 0xcd4EC7b66fbc029C116BA9Ffb3e59351c20B5B06;
 
-    function buyAssetsFromRaribleMarket(uint256[] memory punkIndexes) public {
+    function buyAssetsForEth(bytes memory data) public {
 
     }
 
-    function estimateBatchRaribleAssetPriceInEth(uint256[] memory punkIndexes) public view returns(uint256 totalCost) {
+    function estimateBatchAssetPriceInEth(bytes memory data) public view returns(uint256 totalCost) {
 
     }
 
-    function estimateRaribleAssetPriceInEth(uint256 punkIndexes) public view returns(uint256 totalCost) {
+    function estimateAssetPriceInEth(uint256 punkIndexes) public view returns(uint256 totalCost) {
 
     }
 
-    function _buyAssetFromRaribleMarket(uint256 _index, uint256 _price) internal {
+    function _buyAssetForEth(uint256 _index, uint256 _price) internal {
 
     }
 }

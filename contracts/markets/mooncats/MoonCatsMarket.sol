@@ -25,26 +25,36 @@ contract MoonCatsMarket {
 
     address public MOONCATS = 0x60cd862c9C687A9dE49aecdC3A99b74A4fc54aB6;
 
-    function buyAssetsFromMoonCatsMarket(bytes5[] memory tokenIds) public {
+    function buyAssetsForEth(bytes memory data) public {
+        bytes5[] memory tokenIds;
+        (tokenIds) = abi.decode(
+            data,
+            (bytes5[])
+        );
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            _buyAssetFromMoonCatsMarket(tokenIds[i], estimateMoonCatsAssetPriceInEth(tokenIds[i]));
+            _buyAssetForEth(tokenIds[i], estimateAssetPriceInEth(tokenIds[i]));
         }
     }
 
-    function estimateMoonCatsAssetPriceInEth(bytes5 tokenId) public view returns(uint256) {
+    function estimateAssetPriceInEth(bytes5 tokenId) public view returns(uint256) {
         return IMoonCats(MOONCATS).adoptionOffers(tokenId).price;
     }
 
-    function estimateBatchMoonCatsAssetPriceInEth(bytes5[] memory tokenIds) public view returns(uint256 totalCost) {
+    function estimateBatchAssetPriceInEth(bytes memory data) public view returns(uint256 totalCost) {
+        bytes5[] memory tokenIds;
+        (tokenIds) = abi.decode(
+            data,
+            (bytes5[])
+        );
         for (uint256 i = 0; i < tokenIds.length; i++) {
             totalCost += IMoonCats(MOONCATS).adoptionOffers(tokenIds[0]).price;
         }
     }
 
-    function _buyAssetFromMoonCatsMarket(bytes5 _tokenId, uint256 _price) internal {
+    function _buyAssetForEth(bytes5 _tokenId, uint256 _price) internal {
         bytes memory _data = abi.encodeWithSelector(IMoonCats(MOONCATS).acceptAdoptionOffer.selector, _tokenId);
 
         (bool success, ) = MOONCATS.call{value:_price}(_data);
-        require(success, "_buyAssetFromMoonCatsMarket: moonCats buy failed.");
+        require(success, "_buyAssetForEth: moonCats buy failed.");
     }
 }

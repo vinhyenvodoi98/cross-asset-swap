@@ -27,11 +27,13 @@ contract OpenSeaMarket {
 
     address public OPENSEA = 0x7Be8076f4EA4A4AD08075C2508e481d6C946D12b;
 
-    function buyERC721FromOpenSeaMarket() public {
+    function buyAssetsForEth(bytes memory data) public {}
 
-    }
+    function estimateAssetPriceInEth(uint256 tokenId) public view returns(uint256) {}
 
-    function buyERC1155FromOpenSeaMarket() public {}
+    function estimateBatchAssetPriceInEth(bytes memory data) public view returns(uint256 totalCost) {}
+
+    function _buyAssetForEth(uint256 _tokenId, uint256 _price) internal {}
 
 /*     function decode(bytes memory _data) public {
         address[14] memory addrs;
