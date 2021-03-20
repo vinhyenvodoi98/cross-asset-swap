@@ -3,7 +3,7 @@
 pragma solidity ^0.6.0;
 pragma experimental ABIEncoderV2;
 
-import "@openzeppelinV2/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 
 interface IRarible {
         enum AssetType {ETH, ERC20, ERC1155, ERC721, ERC721Deprecated}

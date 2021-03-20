@@ -3,7 +3,7 @@
 pragma solidity ^0.6.0;
 pragma experimental ABIEncoderV2;
 
-import "@openzeppelinV2/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 
 interface ICryptoPunks {
 
@@ -28,9 +28,7 @@ contract CryptoPunksMarket {
 
     function buyAssetsFromCryptoPunkMarket(uint256[] memory punkIndexes) public {
         for (uint256 i = 0; i < punkIndexes.length; i++) {
-            if(offer.isForSale) {
-                _buyPunk(punkIndexes[i], estimateCryptoPunkAssetPriceInEth(punkIndexes[i]));
-            }
+            _buyAssetFromCryptoPunkMarket(punkIndexes[i], estimateCryptoPunkAssetPriceInEth(punkIndexes[i]));
         }
     }
 

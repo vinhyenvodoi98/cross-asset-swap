@@ -14,7 +14,7 @@ contract MarketRegistry is Ownable {
 
     Market[] public markets;
 
-    function addMarket(string name, address proxy) external onlyOwner {
+    function addMarket(string memory name, address proxy) external onlyOwner {
         markets.push(Market(name, proxy, true));
     }
 
@@ -25,6 +25,6 @@ contract MarketRegistry is Ownable {
 
     function setMarketProxy(uint256 marketId, address newProxy) external onlyOwner {
         Market storage market = markets[marketId];
-        market.newProxy = newProxy;
+        market.proxy = newProxy;
     }
 }

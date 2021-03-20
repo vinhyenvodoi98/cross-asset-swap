@@ -3,7 +3,7 @@
 pragma solidity ^0.6.0;
 pragma experimental ABIEncoderV2;
 
-import "@openzeppelinV2/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 
 interface IAxieInfinity {
 
@@ -51,10 +51,10 @@ contract AxieInfinityMarket {
         return IAxieInfinity(AXIE_INFINITY).getCurrentPrice(nftAddress, tokenId);
     }
 
-    function _buyAssetFromAxieInfinityMarket(address nftAddress, uint256 tokenId) public {
-        bytes memory _data = abi.encodeWithSelector(IAxieInfinity(AXIE_INFINITY).bid.selector, nftAddress, tokenId);
+    function _buyAssetFromAxieInfinityMarket(address _nftAddress, uint256 _tokenId) public {
+        bytes memory _data = abi.encodeWithSelector(IAxieInfinity(AXIE_INFINITY).bid.selector, _nftAddress, _tokenId);
 
-        (bool success, ) = AXIE_INFINITY.call{value:estimateAxieInfinityAssetPriceInEth(nftAddress,tokenId)}(_data);
+        (bool success, ) = AXIE_INFINITY.call{value:estimateAxieInfinityAssetPriceInEth(_nftAddress,_tokenId)}(_data);
         require(success, "_buyAssetFromAxieInfinityMarket: axie buy failed.");
     }
 
